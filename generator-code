@@ -1,0 +1,93 @@
+from PIL import Image
+filename=input("filename(with extension);")
+image = Image.open(filename)
+size=image.size
+print(size)
+print(image)
+data=list(image.getdata())
+widht=size[0]
+height=size[1]
+x=1
+y=height
+lista=[]
+for i in range(len(data)):
+	tak=0
+	if data[i][3]!=0:
+		for j in range(len(lista)):
+			if lista[j][0]==x:
+				tak=1
+		if tak==0:
+			lista.append([x,y])
+	x+=1
+	if x>widht:
+		y-=1
+		x=1
+
+lista.sort()
+code1='''{
+  "center": 10.0,
+  "parts": [
+    {
+      "n": "Fuel Tank",
+      "p": {
+        "x": 10.0,
+        "y": 24.0
+      },
+      "o": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 0.0
+      },
+      "t": "-Infinity",
+      "N": {
+        "width_original":'''
+        #"widht"
+code2=''',
+        "width_a": 2.0,
+        "width_b": 2.0,
+        "height":'''
+        #"height"
+code3=''',
+        "fuel_percent": 1.0
+      },
+      "T": {
+        "color_tex": "_",
+        "shape_tex": "_"
+        },
+      "burns": {
+        "angle": 90.0,
+        "intensity": 1.2,
+        "x": -0.0509633645,
+        "top": "''' #"burns"
+code4='''",
+        "bottom":"" 
+        }
+    }
+  ],
+  "stages": [],
+  "rotation": 0.0,
+  "offset": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "interiorView": true
+}'''
+w=int(input("widht(in meters):"))
+hi=int(input("height(in meters):"))
+poczeba=w*100/widht
+poczebay=hi*100/height
+burns=""
+for h in range(len(lista)):
+	bx=lista[h][0]
+	bux=bx*poczeba
+	burnx=int(bux-((widht*poczeba)/2))
+	by=lista[h][1]
+	burny=int(by*poczeba)
+	burns+=str(burnx)
+	burns+=","
+	burns+=str(burny)
+	burns+=","
+burns+=str(burnx)
+
+full=code1+str(w)+code2+str(hi)+code3+burns+code4
+print(full)
